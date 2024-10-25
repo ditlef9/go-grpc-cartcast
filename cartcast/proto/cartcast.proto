@@ -1,0 +1,42 @@
+// cartcast/proto/cartcast.proto
+// This file defines the CartCast service and the associated message types for handling
+// upselling cart data in a gRPC context.
+
+syntax = "proto3";
+
+package upselling;
+
+// The Go package option for the generated code, allowing for proper imports in a Go application.
+option go_package = "ekeberg.com/go-grpc-cartcast/cartcast/proto";
+
+// Importing Google's empty message type for cases where no data needs to be sent in a request or response.
+import "google/protobuf/empty.proto";
+
+// CartCast represents a single upselling item with its properties.
+message CartCast {
+  string id = 1;
+  string title = 2;
+  string x_cord = 3;
+  string y_cord = 4;
+  string image_url = 5;
+  string video_url = 6;
+}
+
+// CartCastId is used to encapsulate the ID of a CartCast for requests and responses.
+message CartCastId {
+  string id = 1; // Unique identifier for a CartCast item.
+}
+message CartCastCoords {
+  string x_cord = 1;
+  string y_cord = 2;
+}
+
+// Define the CartCastService service with RPC methods for managing upselling items.
+service CartCastService {
+  rpc CreateCartCast(CartCast) returns (CartCastId); // Creates a new upselling item and returns its ID.
+  rpc ReadCartCast(CartCastId) returns (CartCast); // Reads an existing upselling item by its ID and returns the CartCast details.
+  rpc ReadByCoordsCartCast(CartCastCoords) returns (CartCast); // Reads an existing upselling item by its ID and returns the CartCast details.
+  rpc UpdateCartCast(CartCast) returns (google.protobuf.Empty); // Updates an existing upselling item and returns an empty resp
+  rpc DeleteCartCast(CartCastId) returns (google.protobuf.Empty); // Deletes an existing upselling item by its ID and returns an empty response.
+  rpc ListCartCast(google.protobuf.Empty) returns (stream CartCast); // Lists all upselling items, returning a stream of CartCast messages.
+}
